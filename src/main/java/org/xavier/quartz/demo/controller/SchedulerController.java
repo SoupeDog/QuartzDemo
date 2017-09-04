@@ -26,12 +26,12 @@ import org.xavier.quartz.demo.core.job.PrintJob;
 public class SchedulerController extends BaseController {
     @Autowired
     Scheduler scheduler;
-    @Autowired
-    ApplicationContext context;
-    @Autowired
-    ObjectMapper mapper;
-    @Autowired
-    RestTemplate restTemplate;
+//    @Autowired
+//    ApplicationContext context;
+//    @Autowired
+//    ObjectMapper mapper;
+//    @Autowired
+//    RestTemplate restTemplate;
 
     @PostMapping("set")
     public ResponseEntity<?> setJob(@RequestBody TimingPlan timingPlan) {
