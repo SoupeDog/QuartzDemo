@@ -32,6 +32,17 @@
             <artifactId>quartz</artifactId>
             <version>2.3.0</version>
         </dependency>
+        <dependency>
+            <groupId>org.quartz-scheduler</groupId>
+            <artifactId>quartz-jobs</artifactId>
+            <version>2.3.0</version>
+        </dependency>
+        <!--配置 mysql 环境-->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>5.1.21</version>
+        </dependency>
         <!--Apache Commons Lang-->
         <dependency>
             <groupId>org.apache.commons</groupId>

@@ -34,19 +34,22 @@ public class SchedulerController extends BaseController {
     public ResponseEntity<?> setJob(@RequestBody TimingPlan timingPlan) {
         timingPlan.setCreateTs(System.currentTimeMillis());
         JobDetail jobDetail = JobBuilder.newJob().ofType(PrintJob.class)
-                .withIdentity(timingPlan.getName(), timingPlan.getGroup()).setJobData(new JobDataMap() {{
+                .withIdentity(timingPlan.getName(), timingPlan.getGroup())
+                .withDescription(timingPlan.getDescription())
+                .setJobData(new JobDataMap() {{
                     put("ts", System.currentTimeMillis());
                     put("msg", timingPlan.getDescription());
                     put("lastUpdateTs", System.currentTimeMillis());
                 }}).build();
         Trigger trigger = TriggerBuilder
                 .newTrigger()
-                .withIdentity(timingPlan.getName(), timingPlan.getGroup()).usingJobData(new JobDataMap() {{
+                .withIdentity(timingPlan.getName(), timingPlan.getGroup())
+                .withSchedule(CronScheduleBuilder.cronSchedule(timingPlan.getCron()))
+                .usingJobData(new JobDataMap() {{
                     put("ts2", System.currentTimeMillis());
                     put("msg2", timingPlan.getDescription());
                     put("lastUpdateTs2", System.currentTimeMillis());
                 }})
-                .withSchedule(CronScheduleBuilder.cronSchedule(timingPlan.getCron()))
                 .build();
         try {
             scheduler.start();
