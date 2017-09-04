@@ -1,5 +1,6 @@
 package org.xavier.quartz.demo.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.quartz.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -9,7 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.xavier.quartz.demo.domain.bo.core.TimingPlan;
-import org.xavier.quartz.demo.domain.bo.core.mission.PrintMission;
+import org.xavier.quartz.demo.domain.bo.core.job.PrintJob;
 
 
 /**
@@ -26,13 +27,18 @@ public class SchedulerController extends BaseController {
     Scheduler scheduler;
     @Autowired
     ApplicationContext context;
+    @Autowired
+    ObjectMapper mapper;
 
     @PostMapping("set")
     public ResponseEntity<?> setScheduler(@RequestBody TimingPlan timingPlan) {
-        PrintMission mission = context.getBean(("PrintMission"), PrintMission.class);
-        mission.setTimingPlan(timingPlan);
-        JobDetail jobDetail = JobBuilder.newJob().ofType(PrintMission.class)
-                .withIdentity("myJob").build();
+        timingPlan.setCreateTs(System.currentTimeMillis());
+        JobDetail jobDetail = JobBuilder.newJob().ofType(PrintJob.class)
+                .withIdentity("myJob").setJobData(new JobDataMap() {{
+                    put("ts", System.currentTimeMillis());
+                    put("msg", timingPlan.getDescription());
+                    put("lastUpdateTs", System.currentTimeMillis());
+                }}).build();
         Trigger trigger = TriggerBuilder
                 .newTrigger()
                 .withIdentity("myTrigger", "group1")

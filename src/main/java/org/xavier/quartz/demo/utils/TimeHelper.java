@@ -6,7 +6,7 @@ import java.text.SimpleDateFormat;
 
 /**
  * 描述信息：<br/>
- * 时间工具类
+ * 时间工具类(非线程安全)
  *
  * @author Xavier
  * @version 1.0
@@ -15,11 +15,11 @@ import java.text.SimpleDateFormat;
  */
 @Component
 public class TimeHelper {
-    static SimpleDateFormat type_1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-    static SimpleDateFormat type_2 = new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss");
-    static SimpleDateFormat type_3 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-    static SimpleDateFormat type_4 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-    static SimpleDateFormat type_5 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    public static SimpleDateFormat type_1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    public static SimpleDateFormat type_2 = new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss");
+    public static SimpleDateFormat type_3 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    public static SimpleDateFormat type_4 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    public static SimpleDateFormat type_5 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     public static String fromType_1(Long ts) {
         return type_1.format(ts);
