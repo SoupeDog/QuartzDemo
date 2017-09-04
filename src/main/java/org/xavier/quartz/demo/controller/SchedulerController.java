@@ -1,15 +1,12 @@
 package org.xavier.quartz.demo.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.quartz.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
 import org.xavier.quartz.demo.domain.bo.TimingPlan;
 import org.xavier.quartz.demo.core.job.PrintJob;
 

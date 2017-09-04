@@ -2,16 +2,8 @@ package org.xavier.quartz.demo.core.job;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sun.swing.internal.plaf.synth.resources.synth_sv;
 import org.apache.commons.lang3.time.FastDateFormat;
 import org.quartz.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
-import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import org.xavier.quartz.demo.core.factory.RestTemplateFactory;
 
