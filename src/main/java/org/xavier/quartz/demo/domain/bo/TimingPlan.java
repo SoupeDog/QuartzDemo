@@ -1,4 +1,4 @@
-package org.xavier.quartz.demo.domain.bo.core;
+package org.xavier.quartz.demo.domain.bo;
 
 /**
  * 描述信息：<br/>
@@ -11,6 +11,8 @@ package org.xavier.quartz.demo.domain.bo.core;
  */
 public class TimingPlan {
     private Integer id;
+    private String group;//任务组
+    private String name;// 任务名称
     private String cron;// cron 表达式
     private String description;// 定时任务描述
     private Integer type;// 任务类别
@@ -23,6 +25,22 @@ public class TimingPlan {
 
     public Integer getId() {
         return id;
+    }
+
+    public String getGroup() {
+        return group;
+    }
+
+    public void setGroup(String group) {
+        this.group = group;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public void setId(Integer id) {

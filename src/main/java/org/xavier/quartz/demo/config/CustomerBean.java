@@ -7,6 +7,7 @@ import org.quartz.SchedulerFactory;
 import org.quartz.impl.StdSchedulerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.client.RestTemplate;
 
 /**
  * 描述信息：<br/>
@@ -19,10 +20,6 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 public class CustomerBean {
-    @Bean("myFastDateFormat")
-    public FastDateFormat fastDateFormat() {
-        return FastDateFormat.getInstance("yyyy年MM月dd HH:mm:ss");
-    }
 
     @Bean("myScheduler")
     public Scheduler scheduler() throws SchedulerException {
@@ -30,4 +27,8 @@ public class CustomerBean {
         return factory.getScheduler();
     }
 
+    @Bean
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
+    }
 }
