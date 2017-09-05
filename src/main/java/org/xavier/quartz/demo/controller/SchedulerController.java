@@ -35,7 +35,7 @@ public class SchedulerController extends BaseController {
         timingPlan.setCreateTs(System.currentTimeMillis());
         JobDetail jobDetail = JobBuilder.newJob().ofType(PrintJob.class)
                 .withIdentity(timingPlan.getName(), timingPlan.getGroup())
-                .withDescription(timingPlan.getDescription())
+                .withDescription(timingPlan.getDescription())// 注掉能运行 但是也就无法向 job 中传入自定义参数了
 //                .setJobData(new JobDataMap() {{
 //                    put("ts", System.currentTimeMillis());
 //                    put("msg", timingPlan.getDescription());
