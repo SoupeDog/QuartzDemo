@@ -36,21 +36,21 @@ public class SchedulerController extends BaseController {
         JobDetail jobDetail = JobBuilder.newJob().ofType(PrintJob.class)
                 .withIdentity(timingPlan.getName(), timingPlan.getGroup())
                 .withDescription(timingPlan.getDescription())// 注掉能运行 但是也就无法向 job 中传入自定义参数了
-//                .setJobData(new JobDataMap() {{
-//                    put("ts", System.currentTimeMillis());
-//                    put("msg", timingPlan.getDescription());
-//                    put("lastUpdateTs", System.currentTimeMillis());
-//                }})
+                .setJobData(new JobDataMap() {{
+                    put("ts", System.currentTimeMillis() + "");
+                    put("msg", timingPlan.getDescription());
+                    put("lastUpdateTs", System.currentTimeMillis() + "");
+                }})
                 .build();
         Trigger trigger = TriggerBuilder
                 .newTrigger()
                 .withIdentity(timingPlan.getName(), timingPlan.getGroup())
                 .withSchedule(CronScheduleBuilder.cronSchedule(timingPlan.getCron()))
-//                .usingJobData(new JobDataMap() {{
-//                    put("ts2", System.currentTimeMillis());
-//                    put("msg2", timingPlan.getDescription());
-//                    put("lastUpdateTs2", System.currentTimeMillis());
-//                }})
+                .usingJobData(new JobDataMap() {{
+                    put("ts2", System.currentTimeMillis()+"");
+                    put("msg2", timingPlan.getDescription());
+                    put("lastUpdateTs2", System.currentTimeMillis()+"");
+                }})
                 .build();
         try {
             scheduler.start();

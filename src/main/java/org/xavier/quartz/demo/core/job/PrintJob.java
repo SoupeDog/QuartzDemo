@@ -7,6 +7,7 @@ import org.quartz.*;
 import org.springframework.web.client.RestTemplate;
 import org.xavier.quartz.demo.core.factory.RestTemplateFactory;
 
+import java.io.Serializable;
 import java.util.TimeZone;
 
 /**
@@ -41,8 +42,8 @@ public class PrintJob implements Job {
 
         System.out.println("JobName：" + jobDetail.getKey().getName() + "  JobGroup：" + jobDetail.getKey().getGroup());
         System.out.println("TriggerName：" + trigger.getKey().getName() + "  TriggerGroup：" + trigger.getKey().getGroup());// 从结果来看，job 和 trigger 的 name group 是相互独立的
-        System.out.println("任务起始时间：" + fastDateFormat.format(jdMap.get("ts")));
-        System.out.println("任务最后更新时间：" + fastDateFormat.format(jdMap.get("lastUpdateTs")));
+        System.out.println("任务起始时间：" + fastDateFormat.format(Long.valueOf((String) jdMap.get("ts"))));
+        System.out.println("任务最后更新时间：" + fastDateFormat.format(Long.valueOf((String) jdMap.get("lastUpdateTs"))));
         System.out.println(jdMap.get("msg"));
         System.out.println("任务完成时间：" + fastDateFormat.format(System.currentTimeMillis()));
         try {
