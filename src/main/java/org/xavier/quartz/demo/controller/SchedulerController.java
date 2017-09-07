@@ -9,6 +9,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.xavier.quartz.demo.domain.bo.TimingPlan;
 import org.xavier.quartz.demo.core.job.PrintJob;
+import org.xavier.quartz.demo.domain.bo.TimingPlan_Cron;
+import org.xavier.quartz.demo.domain.bo.TimingPlan_Simp;
+
+import java.util.Date;
 
 
 /**
@@ -24,30 +28,90 @@ public class SchedulerController extends BaseController {
     @Autowired
     Scheduler scheduler;
 
-    @PostMapping("set")
-    public ResponseEntity<?> setJob(@RequestBody TimingPlan timingPlan) {
-        timingPlan.setCreateTs(System.currentTimeMillis());
-        JobDetail jobDetail = JobBuilder.newJob().ofType(PrintJob.class)
-                .withIdentity(timingPlan.getName(), timingPlan.getGroup())
-                .withDescription(timingPlan.getDescription())
-                .setJobData(new JobDataMap() {{
-                    put("ts", System.currentTimeMillis() + "");
-                    put("msg", timingPlan.getDescription());
-                    put("lastUpdateTs", System.currentTimeMillis() + "");
-                }})
-                .build();
-
-        Trigger trigger = TriggerBuilder
-                .newTrigger()
-                .withIdentity(timingPlan.getName(), timingPlan.getGroup())
-                .withSchedule(CronScheduleBuilder.cronSchedule(timingPlan.getCron()))
-                .usingJobData(new JobDataMap() {{
-                    put("ts2", System.currentTimeMillis() + "");
-                    put("msg2", timingPlan.getDescription());
-                    put("lastUpdateTs2", System.currentTimeMillis() + "");
-                }})
-                .build();
+    @PostMapping("/set/cron")
+    public ResponseEntity<?> setJob(@RequestBody TimingPlan_Cron timingPlan) {
         try {
+            timingPlan.init();
+            JobDetail jobDetail = JobBuilder.newJob().ofType(PrintJob.class)            // 构造 JobDetail
+                    .withIdentity(timingPlan.getName_Job(), timingPlan.getGroup_Job())
+                    .withDescription(timingPlan.getDescription())
+                    .setJobData(new JobDataMap() {{
+                        put("ts", System.currentTimeMillis() + "");
+                        put("msg", timingPlan.getDescription());
+                        put("lastUpdateTs", System.currentTimeMillis() + "");
+                    }})
+                    .build();
+
+            Trigger trigger = TriggerBuilder            // 构造 Trigger
+                    .newTrigger()
+                    .withIdentity(timingPlan.getName_Trigger(), timingPlan.getGroup_Trigger())
+                    .withSchedule(CronScheduleBuilder.cronSchedule(timingPlan.getCron()))
+                    //TODO 观测 JobDataMap 用
+//                .usingJobData(new JobDataMap() {{
+//                    put("ts2", System.currentTimeMillis() + "");
+//                    put("msg2", timingPlan.getDescription());
+//                    put("lastUpdateTs2", System.currentTimeMillis() + "");
+//                }})
+                    .build();
+
+            scheduler.scheduleJob(jobDetail, trigger);
+            return success();
+        } catch (SchedulerException e) {
+            e.printStackTrace();
+            return fail(500d, e.getMessage(), HttpStatus.INSUFFICIENT_STORAGE);
+        }
+    }
+
+    @PostMapping("/set/simple")
+    public ResponseEntity<?> setJob2(@RequestBody TimingPlan_Simp timingPlan) {
+        try {
+            timingPlan.init();
+            JobDetail jobDetail = JobBuilder.newJob().ofType(PrintJob.class)            // 构造 JobDetail
+                    .withIdentity(timingPlan.getName_Job(), timingPlan.getGroup_Job())
+                    .withDescription(timingPlan.getDescription())
+                    .setJobData(new JobDataMap() {{
+                        put("ts", System.currentTimeMillis() + "");
+                        put("msg", timingPlan.getDescription());
+                        put("lastUpdateTs", System.currentTimeMillis() + "");
+                    }})
+                    .build();
+
+            Trigger trigger;            // 构造 Trigger
+            if (timingPlan.getStartTs() == null) {
+                trigger = TriggerBuilder
+                        .newTrigger()
+                        .withIdentity(timingPlan.getName_Trigger(), timingPlan.getGroup_Trigger())
+                        .withSchedule(SimpleScheduleBuilder
+                                .simpleSchedule()
+                                .withIntervalInSeconds(timingPlan.getInterval())
+                                .withRepeatCount(timingPlan.getRepeatTime())
+                        )
+                        //TODO 观测 JobDataMap 用
+//                .usingJobData(new JobDataMap() {{
+//                    put("ts2", System.currentTimeMillis() + "");
+//                    put("msg2", timingPlan.getDescription());
+//                    put("lastUpdateTs2", System.currentTimeMillis() + "");
+//                }})
+                        .build();
+            } else {
+                trigger = TriggerBuilder
+                        .newTrigger()
+                        .withIdentity(timingPlan.getName_Trigger(), timingPlan.getGroup_Trigger())
+                        .startAt(new Date(timingPlan.getStartTs()))
+                        .withSchedule(SimpleScheduleBuilder
+                                .simpleSchedule()
+                                .withIntervalInSeconds(timingPlan.getInterval())
+                                .withRepeatCount(timingPlan.getRepeatTime())
+                        )
+                        //TODO 观测 JobDataMap 用
+//                .usingJobData(new JobDataMap() {{
+//                    put("ts2", System.currentTimeMillis() + "");
+//                    put("msg2", timingPlan.getDescription());
+//                    put("lastUpdateTs2", System.currentTimeMillis() + "");
+//                }})
+                        .build();
+            }
+
             scheduler.scheduleJob(jobDetail, trigger);
             return success();
         } catch (SchedulerException e) {
@@ -59,7 +123,8 @@ public class SchedulerController extends BaseController {
     @PostMapping("del")
     public ResponseEntity<?> delJob(@RequestBody TimingPlan timingPlan) {
         try {
-            scheduler.deleteJob(new JobKey(timingPlan.getName(), timingPlan.getGroup()));
+            timingPlan.init();
+            scheduler.deleteJob(new JobKey(timingPlan.getName_Job(), timingPlan.getGroup_Job()));
             return success();
         } catch (SchedulerException e) {
             e.printStackTrace();
