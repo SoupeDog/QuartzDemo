@@ -23,7 +23,7 @@ public class CustomerBean {
     public Scheduler scheduler() throws SchedulerException {
         SchedulerFactory factory = new StdSchedulerFactory();
         Scheduler scheduler = factory.getScheduler();
-        scheduler.start();
+        scheduler.startDelayed(10);
         return scheduler;
     }
 }
