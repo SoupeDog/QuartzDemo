@@ -23,12 +23,6 @@ import org.xavier.quartz.demo.core.job.PrintJob;
 public class SchedulerController extends BaseController {
     @Autowired
     Scheduler scheduler;
-//    @Autowired
-//    ApplicationContext context;
-//    @Autowired
-//    ObjectMapper mapper;
-//    @Autowired
-//    RestTemplate restTemplate;
 
     @PostMapping("set")
     public ResponseEntity<?> setJob(@RequestBody TimingPlan timingPlan) {
@@ -42,18 +36,18 @@ public class SchedulerController extends BaseController {
                     put("lastUpdateTs", System.currentTimeMillis() + "");
                 }})
                 .build();
+
         Trigger trigger = TriggerBuilder
                 .newTrigger()
                 .withIdentity(timingPlan.getName(), timingPlan.getGroup())
                 .withSchedule(CronScheduleBuilder.cronSchedule(timingPlan.getCron()))
                 .usingJobData(new JobDataMap() {{
-                    put("ts2", System.currentTimeMillis()+"");
+                    put("ts2", System.currentTimeMillis() + "");
                     put("msg2", timingPlan.getDescription());
-                    put("lastUpdateTs2", System.currentTimeMillis()+"");
+                    put("lastUpdateTs2", System.currentTimeMillis() + "");
                 }})
                 .build();
         try {
-            scheduler.start();
             scheduler.scheduleJob(jobDetail, trigger);
             return success();
         } catch (SchedulerException e) {

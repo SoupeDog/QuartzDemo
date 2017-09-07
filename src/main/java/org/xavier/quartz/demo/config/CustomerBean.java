@@ -22,11 +22,8 @@ public class CustomerBean {
     @Bean("myScheduler")
     public Scheduler scheduler() throws SchedulerException {
         SchedulerFactory factory = new StdSchedulerFactory();
-        return factory.getScheduler();
+        Scheduler scheduler = factory.getScheduler();
+        scheduler.start();
+        return scheduler;
     }
-
-//    @Bean
-//    public RestTemplate restTemplate() {
-//        return new RestTemplate();
-//    }
 }
