@@ -33,7 +33,7 @@ public class PrintJob implements Job {
         JobDetail jobDetail = context.getJobDetail();
         Trigger trigger = context.getTrigger();
 
-        //TODO 测试是否能实现 HTTP 回调（结果：能）
+        //TODO 测试是否能实现 HTTP 回调（结果：能）但 Spring Bean 方式初始化 RestTemplate 对象未成功
 //        System.out.println(restTemplate.exchange("http://www.baidu.com", HttpMethod.GET, new HttpEntity<String>(null, new HttpHeaders() {{
 //            setContentType(MediaType.APPLICATION_JSON_UTF8);
 //        }}), String.class));
@@ -42,7 +42,7 @@ public class PrintJob implements Job {
         System.out.print("  TriggerName：" + trigger.getKey().getName() + "  TriggerGroup：" + trigger.getKey().getGroup());// 从结果来看，job 和 trigger 的 name group 是相互独立的
         System.out.print("  任务起始时间：" + fastDateFormat.format(Long.valueOf((String) jdMap.get("ts"))));
         System.out.print("  任务最后更新时间：" + fastDateFormat.format(Long.valueOf((String) jdMap.get("lastUpdateTs"))));
-        System.out.print("  "+jdMap.get("msg"));
+        System.out.print("  " + jdMap.get("msg"));
         System.out.println("  任务完成时间：" + fastDateFormat.format(System.currentTimeMillis()));
         //TODO 观测 JobDataMap 用
 //        try {
