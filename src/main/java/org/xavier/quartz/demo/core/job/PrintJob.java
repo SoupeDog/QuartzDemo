@@ -1,13 +1,10 @@
 package org.xavier.quartz.demo.core.job;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.time.FastDateFormat;
 import org.quartz.*;
 import org.springframework.web.client.RestTemplate;
 import org.xavier.quartz.demo.core.factory.RestTemplateFactory;
 
-import java.io.Serializable;
 import java.util.TimeZone;
 
 /**
